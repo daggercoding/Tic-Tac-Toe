@@ -16,13 +16,24 @@ const winningPosition=[
     [2,4,6]
 ]
 
-function calculateWinner() {
+function gameInt() {
     currentPlayer="X";
     gameGrid=['','','','','','','','',''];
+    // lets empty all the places
+    boxes.forEach((box,index)=>
+    {
+        box.innerText="";
+        boxes[index].style.pointerEvents="all";
+        //initialize each the box with initial css properties
+        box.classList=`box box${index+1}`
+           
+    })
     button.classList.remove("active");
     gameInfo.innerHTML=`CURRENT-PLAYER : ${currentPlayer}`;
+     
+     
 }
-calculateWinner();
+gameInt();
 
 
 boxes.forEach((para,index)=>{
@@ -56,8 +67,49 @@ function swapTurn()
     gameInfo.innerHTML=`CURRENT-PLAYER : ${currentPlayer}`;
 }
 
+button.addEventListener("click",gameInt)
 //predictig the winner
 function checkGameOver()
 {
-    
+    let answer ="";
+  winningPosition.forEach((position)=>
+  {
+    if((gameGrid[position[0]]!==""||gameGrid[position[1]]!==""||gameGrid[position[2]]!=="")&&(gameGrid[position[0]]===gameGrid[position[1]]&&gameGrid[position[1]]===gameGrid[position[2]]))
+    {
+        //CHECK IF X OR O IS THE WINNER
+        if(gameGrid[position[0]]==="X")
+        {
+            answer="X"
+        }
+        else
+             {answer="O"}
+        boxes.forEach((box)=>{
+            box.style.pointerEvents="none";
+        })   
+       
+        //NOW WE KNOW EITHER X OR ETHER O IS WINNER SO GREEN THE SCREEN
+        boxes[position[0]].classList.add("win");
+        boxes[position[1]].classList.add("win");
+        boxes[position[2]].classList.add("win");    
+    }
+    if(answer!=="")
+    {
+       gameInfo.innerText=(`Winner Is : ${answer}`) 
+       button.classList.add("active");
+    }
+  })
+  let fillCount=0;
+  gameGrid.forEach((box)=>{
+    if(box!=="")
+    {
+    fillCount++;
+    }
+  })
+  if(fillCount==9)
+  {
+    gameInfo.innerText=(`GAME-TIED`);
+    button.classList.add("active");
+  }
+
 }
+
